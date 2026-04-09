@@ -4,8 +4,6 @@ A product analytics project analyzing 562,000+ guest reviews to assess
 the health of Airbnb's NYC marketplace and surface actionable insights 
 for the product team.
 
-**Built by:** Kavya Murugan | Data Analyst & Business Analytics MS, ASU
-
 ---
 
 ## 🔍 What This Project Does
