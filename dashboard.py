@@ -1,22 +1,21 @@
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-import numpy as np
-from textblob import TextBlob
 
 st.set_page_config(page_title="Airbnb NYC Product Health", layout="wide")
 st.title("🏠 Airbnb NYC — Product Health Dashboard")
 st.caption("Analyzing 50,000 guest reviews | Data: Inside Airbnb")
 
-# --- Generate sample data for demo ---
 @st.cache_data
-def load_data():
+def load_reviews():
     reviews = pd.read_csv('reviews_sample.csv')
     reviews['date'] = pd.to_datetime(reviews['date'])
     reviews['month'] = reviews['date'].dt.to_period('M').astype(str)
+    return reviews
 
-    # Hardcode neighborhood data since listings CSV is too large for GitHub
-    neighborhoods = {
+@st.cache_data
+def load_listings():
+    return pd.DataFrame({
         'neighbourhood_cleansed': [
             'Belle Harbor', 'Breezy Point', 'Castleton Corners',
             'Grymes Hill', 'Douglaston', 'West Farms', 'Williamsburg',
@@ -27,10 +26,10 @@ def load_data():
             4.98, 4.97, 4.96, 4.95, 4.94, 4.93, 4.85,
             4.82, 4.80, 4.78, 4.75, 4.73, 4.70, 4.68, 4.65
         ]
-    }
-    listings = pd.DataFrame(neighborhoods)
+    })
 
-    return reviews, listings
+reviews = load_reviews()
+listings = load_listings()
 
 # --- KPI Cards ---
 col1, col2, col3, col4 = st.columns(4)
@@ -49,7 +48,7 @@ fig1 = px.line(monthly, x='month', y='count',
                color_discrete_sequence=['#FF5A5F'])
 st.plotly_chart(fig1, use_container_width=True)
 
-# --- Sentiment Breakdown + Neighborhood Ratings ---
+# --- Sentiment Breakdown + Neighborhoods ---
 st.subheader("🥧 Sentiment Breakdown & 📍 Top Neighborhoods by Rating")
 col1, col2 = st.columns(2)
 
@@ -70,7 +69,6 @@ st.divider()
 # --- Key Findings ---
 st.subheader("🔍 Key Findings & Recommendations")
 col1, col2, col3 = st.columns(3)
-
 col1.error("**#1 Listing Misrepresentation**\n\nGuests repeatedly flag listings that don't match reality — misleading photos, luxury labels on basic apartments.")
 col2.warning("**#2 2024 Sentiment Dip**\n\nPositive review volume dropped in early 2024, coinciding with NYC's Local Law 18 short-term rental regulations.")
 col3.success("**#3 Outer Borough Opportunity**\n\nBelle Harbor, Breezy Point outperform Manhattan neighborhoods on ratings but remain undiscovered in search.")
