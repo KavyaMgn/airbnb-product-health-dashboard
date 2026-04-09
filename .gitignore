@@ -1,3 +1,7 @@
 .venv/
-*.csv
 .DS_Store
+reviews.csv
+reviews_clean.csv
+reviews_sentiment.csv
+listings.csv
+listings_clean.csv

@@ -11,45 +11,13 @@ st.caption("Analyzing 50,000 guest reviews | Data: Inside Airbnb")
 # --- Generate sample data for demo ---
 @st.cache_data
 def load_data():
-    np.random.seed(42)
-    n = 5000
+    reviews = pd.read_csv('reviews_sample.csv')
+    reviews['date'] = pd.to_datetime(reviews['date'])
+    reviews['month'] = reviews['date'].dt.to_period('M').astype(str)
 
-    dates = pd.date_range(start='2022-01-01', end='2026-02-01', periods=n)
-
-    sentiments = np.random.choice(
-        ['Positive', 'Neutral', 'Negative'],
-        size=n,
-        p=[0.848, 0.144, 0.008]
-    )
-    scores = np.where(sentiments == 'Positive',
-                      np.random.uniform(0.1, 1.0, n),
-                      np.where(sentiments == 'Negative',
-                               np.random.uniform(-1.0, -0.1, n),
-                               np.random.uniform(-0.1, 0.1, n)))
-
-    reviews = pd.DataFrame({
-        'date': dates,
-        'sentiment_label': sentiments,
-        'sentiment_score': scores,
-        'month': pd.PeriodIndex(dates, freq='M').astype(str)
-    })
-
-    neighborhoods = [
-        'Belle Harbor', 'Breezy Point', 'Castleton Corners',
-        'Grymes Hill', 'Douglaston', 'West Farms', 'Williamsburg',
-        'Bushwick', 'Harlem', 'Midtown', 'Chelsea', 'Brooklyn Heights',
-        'Astoria', 'Flushing', 'Bronx'
-    ]
-    listings = pd.DataFrame({
-        'neighbourhood_cleansed': neighborhoods,
-        'review_scores_rating': [4.98, 4.97, 4.96, 4.95, 4.94,
-                                  4.93, 4.85, 4.82, 4.80, 4.78,
-                                  4.75, 4.73, 4.70, 4.68, 4.65]
-    })
+    listings = pd.read_csv('listings_clean.csv')
 
     return reviews, listings
-
-reviews, listings = load_data()
 
 # --- KPI Cards ---
 col1, col2, col3, col4 = st.columns(4)
