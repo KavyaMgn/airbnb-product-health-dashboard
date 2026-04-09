@@ -1,5 +1,7 @@
 # 🏠 Airbnb NYC — Product Health Dashboard
 
+🚀 **[View Live Dashboard](https://airbnb-appuct-health-dashboard-bjfjvcpuf4kvei38c3ozan.streamlit.app)**
+
 A product analytics project analyzing 562,000+ guest reviews to assess 
 the health of Airbnb's NYC marketplace and surface actionable insights 
 for the product team.
